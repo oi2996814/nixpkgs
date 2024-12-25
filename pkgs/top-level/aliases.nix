@@ -112,6 +112,10 @@ mapAliases {
   apacheKafka_3_5 = throw "apacheKafka_2_8 through _3_5 have been removed from nixpkgs as outdated"; # Added 2024-06-13
   antimicroX = throw "'antimicroX' has been renamed to/replaced by 'antimicrox'"; # Converted to throw 2024-10-17
   apacheAnt = ant; # Added 2024-11-28
+  apple-sdk_10_12 = throw "apple-sdk_10_12 was removed as Nixpkgs no longer supports macOS 10.12; see the 25.05 release notes"; # Added 2024-10-27
+  apple-sdk_10_13 = throw "apple-sdk_10_13 was removed as Nixpkgs no longer supports macOS 10.13; see the 25.05 release notes"; # Added 2024-10-27
+  apple-sdk_10_14 = throw "apple-sdk_10_14 was removed as Nixpkgs no longer supprots macOS 10.14; see the 25.05 release notes"; # Added 2024-10-27
+  apple-sdk_10_15 = throw "apple-sdk_10_15 was removed as Nixpkgs no longer supports macOS 10.15; see the 25.05 release notes"; # Added 2024-10-27
   appthreat-depscan = dep-scan; # Added 2024-04-10
   arcanist = throw "arcanist was removed as phabricator is not supported and does not accept fixes"; # Added 2024-06-07
   aria = aria2; # Added 2024-03-26
@@ -155,6 +159,8 @@ mapAliases {
   bloom = throw "'bloom' has been removed because it was unmaintained upstream."; # Added 2024-11-02
   bmap-tools = bmaptool; # Added 2024-08-05
   boost175 = throw "Boost 1.75 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2024-11-24
+  boost184 = throw "Boost 1.84 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2024-11-24
+  boost185 = throw "Boost 1.85 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2024-11-24
   boost_process = throw "boost_process has been removed as it is included in regular boost"; # Added 2024-05-01
   bpb = throw "bpb has been removed as it is unmaintained and not compatible with recent Rust versions"; # Added 2024-04-30
   bpftool = throw "'bpftool' has been renamed to/replaced by 'bpftools'"; # Converted to throw 2024-10-17
@@ -391,6 +397,7 @@ mapAliases {
   flutter322 = throw "flutter322 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2024-10-05
   flutter323 = throw "flutter323 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2024-10-05
   fluxus = throw "fluxus has been removed because it hasn't been updated in 9 years and depended on insecure Racket 7.9"; # Added 2024-12-06
+  fmt_8 = throw "fmt_8 has been removed as it is obsolete and was no longer used in the tree"; # Added 2024-11-12
   foldingathome = throw "'foldingathome' has been renamed to/replaced by 'fahclient'"; # Converted to throw 2024-10-17
   forgejo-actions-runner = forgejo-runner; # Added 2024-04-04
 
@@ -810,6 +817,10 @@ mapAliases {
   mcomix3 = mcomix; # Added 2022-06-05
   mdt = md-tui; # Added 2024-09-03
   meme = throw "'meme' has been renamed to/replaced by 'meme-image-generator'"; # Converted to throw 2024-10-17
+  memorymapping = throw "memorymapping has been removed, as it was only useful on old macOS versions that are no longer supported"; # Added 2024-10-05
+  memorymappingHook = throw "memorymapping has been removed, as it was only useful on old macOS versions that are no longer supported"; # Added 2024-10-05
+  memstream = throw "memstream has been removed, as it was only useful on old macOS versions that are no longer supported"; # Added 2024-10-05
+  memstreamHook = throw "memstream has been removed, as it was only useful on old macOS versions that are no longer supported"; # Added 2024-10-05
   mhwaveedit = throw "'mkwaveedit' has been removed due to lack of maintenance upstream. Consider using 'audacity' or 'tenacity' instead";
   microcodeAmd = microcode-amd; # Added 2024-09-08
   microcodeIntel = microcode-intel; # Added 2024-09-08
@@ -817,9 +828,10 @@ mapAliases {
   MIDIVisualizer = midivisualizer; # Added 2024-06-12
   mikutter = throw "'mikutter' has been removed because the package was broken and had no maintainers"; # Added 2024-10-01
   mime-types = mailcap; # Added 2022-01-21
-  minetest-touch = minetestclient; # Added 2024-08-12
-  minetestclient_5 = minetestclient; # Added 2023-12-11
-  minetestserver_5 = minetestserver; # Added 2023-12-11
+  minetest = luanti; # Added 2024-11-11
+  minetestclient = luanti-client; # Added 2024-11-11
+  minetestserver = luanti-server; # Added 2024-11-11
+  minetest-touch = luanti-client; # Added 2024-08-12
   minizip2 = pkgs.minizip-ng; # Added 2022-12-28
   mod_dnssd = throw "'mod_dnssd' has been renamed to/replaced by 'apacheHttpdPackages.mod_dnssd'"; # Converted to throw 2024-10-17
   mod_fastcgi = throw "'mod_fastcgi' has been renamed to/replaced by 'apacheHttpdPackages.mod_fastcgi'"; # Converted to throw 2024-10-17
@@ -1258,6 +1270,7 @@ mapAliases {
   taplo-cli = taplo; # Added 2022-07-30
   taplo-lsp = taplo; # Added 2022-07-30
   taro = taproot-assets; # Added 2023-07-04
+  tbb_2021_5 = throw "tbb_2021_5 has been removed from nixpkgs, as it broke with GCC 14";
   tcl-fcgi = tclPackages.tcl-fcgi; # Added 2024-10-02
   tclcurl = tclPackages.tclcurl; # Added 2024-10-02
   tcllib = tclPackages.tcllib; # Added 2024-10-02
@@ -1335,6 +1348,7 @@ mapAliases {
   unifi8 = unifi; # Added 2024-11-15
   unifiLTS = throw "'unifiLTS' has been removed since UniFi no longer has LTS and stable releases. Use `pkgs.unifi` instead."; # Added 2024-04-11
   unifiStable = throw "'unifiStable' has been removed since UniFi no longer has LTS and stable releases. Use `pkgs.unifi` instead."; # Converted to throw 2024-04-11
+  unl0kr = throw "'unl0kr' is now included with buffybox. Use `pkgs.buffybox` instead."; # Removed 2024-12-20
   untrunc = throw "'untrunc' has been renamed to/replaced by 'untrunc-anthwlock'"; # Converted to throw 2024-10-17
   urxvt_autocomplete_all_the_things = throw "'urxvt_autocomplete_all_the_things' has been renamed to/replaced by 'rxvt-unicode-plugins.autocomplete-all-the-things'"; # Converted to throw 2024-10-17
   urxvt_bidi = throw "'urxvt_bidi' has been renamed to/replaced by 'rxvt-unicode-plugins.bidi'"; # Converted to throw 2024-10-17
@@ -1351,6 +1365,7 @@ mapAliases {
 
   ### V ###
 
+  v8 = throw "`v8` has been removed as it's unmaintained for several years and has vulnerabilites. Please migrate to `nodejs.libv8`"; # Added 2024-12-21
   validphys2 = throw "validphys2 has been removed, since it has a broken dependency that was removed"; # Added 2024-08-21
   vamp = { vampSDK = vamp-plugin-sdk; }; # Added 2020-03-26
   vaapiIntel = intel-vaapi-driver; # Added 2023-05-31
