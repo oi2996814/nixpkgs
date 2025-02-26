@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.19.1";
+  version = "5.20.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
     tag = "v${version}";
-    hash = "sha256-Tx3liE/MLInEfNMc7e+YtvXg/hOsfOyJq6FwfmAIwz0=";
+    hash = "sha256-Vc+yjMd5XCM97Y0JIfII+PfNz0rx1hi9N370mgBbO+8=";
   };
 
   postPatch = ''
@@ -40,6 +40,10 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     versioneer
+  ];
+
+  pythonRelaxDeps = [
+    "pytensor"
   ];
 
   dependencies = [

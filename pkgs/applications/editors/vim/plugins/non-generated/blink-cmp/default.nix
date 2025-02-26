@@ -9,19 +9,19 @@
   replaceVars,
 }:
 let
-  version = "0.10.0";
+  version = "0.12.4";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-MfHI4efAdaoCU8si6YFdznZmSTprthDq3YKuF91z7ss=";
+    hash = "sha256-ybzEQHvZIiF+B2SIdFX8HJGai50PUw5QRgrL7qJ0sUk=";
   };
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
     pname = "blink-fuzzy-lib";
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-ISCrUaIWNn+SfNzrAXKqeBbQyEnuqs3F8GAEl90kK7I=";
+    cargoHash = "sha256-W7CdF70BMXKMCcooR6adw2wwHJ3WznZ+o8KRyHWMeeI=";
 
     nativeBuildInputs = [ git ];
 
@@ -59,6 +59,7 @@ vimUtils.buildVimPlugin {
   meta = {
     description = "Performant, batteries-included completion plugin for Neovim";
     homepage = "https://github.com/saghen/blink.cmp";
+    changelog = "https://github.com/Saghen/blink.cmp/blob/v${version}/CHANGELOG.md";
     maintainers = with lib.maintainers; [
       balssh
       redxtech

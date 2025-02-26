@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "jjui";
-  version = "0.2";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "idursun";
     repo = "jjui";
     tag = "v${version}";
-    hash = "sha256-V2HwVpZ7K7mYoZECOc+dfXuvBlRsN5OgRHasdpX+kFw=";
+    hash = "sha256-PAquHh3VVAhc4Tw1XkyKmwFbpLVkDRCMT+FGtqiydCA=";
   };
 
-  vendorHash = "sha256-pzbOFXSlEebc4fCyNyQSdeVqar+HfEjsSyJo+mHkQeg=";
+  vendorHash = "sha256-MxTwe0S2wvkIy8VJl1p8utTX98zfcwpNgCdnpFAMxO0=";
 
   postFixup = ''
     mv $out/bin/cmd $out/bin/jjui

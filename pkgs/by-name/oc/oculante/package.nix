@@ -32,7 +32,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6jow0ektqmEcwFEaJgPqhJPs8LlYmPRLE+zqk1T4wDk=";
   };
 
-  cargoHash = "sha256-0e4FoWhZwq6as0JYHGj1zoAOSr71ztqtWJEY3QXDs9s=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-MQ9nTWRYONZP6ZrMVrwKqbyTpWeyQNzFFcnNzwj1z8M=";
 
   nativeBuildInputs = [
     cmake
@@ -54,7 +55,6 @@ rustPlatform.buildRustPackage rec {
       libXi
       libXrandr
       gtk3
-
       libxkbcommon
       wayland
     ]
@@ -69,20 +69,28 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
-    install -Dm444 $src/res/icons/icon.png -t $out/share/icons/hicolor/128x128/apps/
+    install -Dm444 $src/res/icons/icon.png $out/share/icons/hicolor/128x128/apps/oculante.png
     install -Dm444 $src/res/oculante.desktop -t $out/share/applications
     wrapProgram $out/bin/oculante \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath (
+          [
+            libGL
+            libxkbcommon
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland ]
+        )
+      }
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Minimalistic crossplatform image viewer written in Rust";
     homepage = "https://github.com/woelper/oculante";
     changelog = "https://github.com/woelper/oculante/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "oculante";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       dit7ya
       figsoda
     ];

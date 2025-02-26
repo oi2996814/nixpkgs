@@ -82,13 +82,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "4546";
+  version = "4731";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-NUt6Q372jsCzcSAEqe2VZB2ZUpGSZyrvr0wyqrBYoOY=";
+    hash = "sha256-XB7TI1/Ui9BGdsD5TVH5MMZalgEGquW9wYcAhxgAcP0=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -144,7 +144,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       (cmakeBool "GGML_BLAS" blasSupport)
       (cmakeBool "GGML_CLBLAST" openclSupport)
       (cmakeBool "GGML_CUDA" cudaSupport)
-      (cmakeBool "GGML_HIPBLAS" rocmSupport)
+      (cmakeBool "GGML_HIP" rocmSupport)
       (cmakeBool "GGML_METAL" metalSupport)
       (cmakeBool "GGML_RPC" rpcSupport)
       (cmakeBool "GGML_VULKAN" vulkanSupport)
