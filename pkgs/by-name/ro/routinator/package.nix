@@ -4,6 +4,7 @@
   fetchFromGitHub,
   stdenv,
   darwin,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,7 +18,8 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-6wYNuGSB55ozzPEbptfEEp/euzh/IRfNrdREWF0xGTU=";
   };
 
-  cargoHash = "sha256-2fyfiwShxsz61nFTNfzjrbClnzIgjQP+kGHgZSB534I=";
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-ogeIPr98vlakpzNJWkfMU3DKVpVPkyVay/CrE616UXU=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk.frameworks;
@@ -34,5 +36,9 @@ rustPlatform.buildRustPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ _0x4A6F ];
     mainProgram = "routinator";
+  };
+
+  passthru.tests = {
+    basic-functioniality = nixosTests.routinator;
   };
 }

@@ -39,7 +39,7 @@ let
       cleanArgs args
       // {
         pname = "astal-${name}";
-        version = "0-unstable-2025-01-23";
+        version = "0-unstable-2025-02-20";
 
         __structuredAttrs = true;
         strictDeps = true;
@@ -47,8 +47,8 @@ let
         src = fetchFromGitHub {
           owner = "Aylur";
           repo = "astal";
-          rev = "127e9cdcbf173846a3c40ddc0abfbb038df48042";
-          hash = "sha256-ZCxxshGN7XooabArcoGkYSNx5yVunqjKJi2aTv6cznI=";
+          rev = "3620d51bc6c23ada1bd4b7c9cf1c458c138e68df";
+          hash = "sha256-h6RFLln99Br7o0TmtKE+vd6F2PQiGBIrRobf4Ld2wRA=";
         };
 
         sourceRoot = "${finalAttrs.src.name}/${sourceRoot}";

@@ -92,13 +92,19 @@ buildPythonPackage rec {
     "mock_tests"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "weaviate" ];
 
   meta = {
     description = "Python native client for easy interaction with a Weaviate instance";
     homepage = "https://github.com/weaviate/weaviate-python-client";
-    changelog = "https://github.com/weaviate/weaviate-python-client/releases/tag/v${version}";
+    changelog = "https://github.com/weaviate/weaviate-python-client/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
+    badPlatforms = [
+      # weaviate.exceptions.WeaviateGRPCUnavailableError
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

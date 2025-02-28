@@ -221,6 +221,7 @@ with lib.maintainers;
     members = [
       xanderio
       blitz
+      snu
     ];
     scope = "Team for Cyberus Technology employees who collectively maintain packages.";
     shortName = "Cyberus Technology employees";
@@ -470,7 +471,6 @@ with lib.maintainers;
   gnome-circle = {
     members = [
       aleksana
-      dawidd6
       getchoo
       michaelgrahamevans
     ];
@@ -516,7 +516,6 @@ with lib.maintainers;
     members = [
       fab
       hexa
-      mic92
     ];
     scope = "Maintain the Home Assistant ecosystem";
     shortName = "Home Assistant";
@@ -547,7 +546,6 @@ with lib.maintainers;
       cleverca22
       disassembler
       manveru
-      nrdxp
     ];
     scope = "Input-Output Global employees, which maintain critical software";
     shortName = "Input-Output Global employees";
@@ -571,6 +569,7 @@ with lib.maintainers;
       edwtjo
       leona
       theCapypara
+      thiagokokada
     ];
     shortName = "Jetbrains";
     scope = "Maintainers of the Jetbrains IDEs in nixpkgs";
@@ -771,7 +770,6 @@ with lib.maintainers;
       mguentner
       ralith
       dandellion
-      sumnerevans
       nickcao
       teutat3s
     ];
@@ -1160,7 +1158,10 @@ with lib.maintainers;
   };
 
   zig = {
-    members = [ figsoda ];
+    members = [
+      figsoda
+      RossComputerGuy
+    ];
     scope = "Maintain the Zig compiler toolchain and nixpkgs integration.";
     shortName = "Zig";
     enableFeatureFreezePing = true;
