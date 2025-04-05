@@ -737,8 +737,8 @@ let
         mktplcRef = {
           name = "vscode-intelephense-client";
           publisher = "bmewburn";
-          version = "1.14.3";
-          hash = "sha256-YmrE0HQlqtuFqD3CDuU5SHnvDbZsfZWEIAZLTkiNXtE=";
+          version = "1.14.4";
+          hash = "sha256-WBtaRLAdE2Ttlq4fAS2kI3d0dUAVB+CTdksiSILJ4hY=";
         };
         meta = {
           description = "PHP code intelligence for Visual Studio Code";
@@ -5038,8 +5038,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.61";
-          hash = "sha256-cKiIva4nzROp+bbwkMxBvguLMXVe/9uGcdhVhLxmae0=";
+          version = "0.0.62";
+          hash = "sha256-Fq3NmCL17QVAmOmFWSkxc0qRwCRDsRbkeRzwyP02Nq4=";
         };
         meta = {
           description = "VSCode language extension for Uiua";

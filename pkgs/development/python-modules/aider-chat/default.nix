@@ -112,6 +112,7 @@
   torch,
   nltk,
   boto3,
+  nix-update-script,
 }:
 
 let
@@ -123,7 +124,7 @@ let
     ];
   };
 
-  version = "0.80.0";
+  version = "0.81.1";
   aider-chat = buildPythonPackage {
     pname = "aider-chat";
     inherit version;
@@ -136,7 +137,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       tag = "v${version}";
-      hash = "sha256-W3GO5+0rprQHmn1upL3pcXuv2e9Wir6TW0tUnvZj48E=";
+      hash = "sha256-TNSdsJBmF/9OCkFe1dZV0y7X2FSTjgp3YV4HGlA9GMc=";
     };
 
     pythonRelaxDeps = true;
@@ -365,6 +366,8 @@ let
             makeWrapperArgs = makeWrapperArgs ++ playwrightArgs ++ helpArgs;
           }
         );
+
+      updateScript = nix-update-script { };
     };
 
     meta = {
