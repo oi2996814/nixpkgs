@@ -5155,8 +5155,6 @@ with pkgs;
 
   shiv = with python3Packages; toPythonApplication shiv;
 
-  sigil = qt6.callPackage ../applications/editors/sigil { };
-
   slither-analyzer = with python3Packages; toPythonApplication slither-analyzer;
 
   # aka., pgp-tools
@@ -5749,8 +5747,6 @@ with pkgs;
 
   zpaq = callPackage ../tools/archivers/zpaq { };
   zpaqd = callPackage ../tools/archivers/zpaq/zpaqd.nix { };
-
-  zint = qt6Packages.callPackage ../development/libraries/zint { };
 
   zstd = callPackage ../tools/compression/zstd {
     cmake = buildPackages.cmakeMinimal;
@@ -12478,6 +12474,7 @@ with pkgs;
   postgresql16JitPackages = recurseIntoAttrs postgresql_16_jit.pkgs;
   postgresql17JitPackages = recurseIntoAttrs postgresql_17_jit.pkgs;
 
+  postgres-websockets = haskellPackages.postgres-websockets.bin;
   postgrest = haskellPackages.postgrest.bin;
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
@@ -19543,6 +19540,8 @@ with pkgs;
   tubekit-unwrapped = callPackage ../applications/networking/cluster/tubekit { };
 
   duden = python3Packages.toPythonApplication python3Packages.duden;
+
+  yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
 
   yazi-unwrapped = callPackage ../by-name/ya/yazi-unwrapped/package.nix {
     inherit (darwin.apple_sdk.frameworks) Foundation;
