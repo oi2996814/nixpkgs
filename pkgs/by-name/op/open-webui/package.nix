@@ -8,13 +8,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.2";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-E9bZr2HG1TSZQDW4KBd3rV8AoQ3lWH8tfTsCY7XAwy0=";
+    hash = "sha256-4V0WhiVhjxYtbwDt+83AfkjJtQFew2P6i1sLtRL13lg=";
   };
 
   frontend = buildNpmPackage rec {
@@ -30,7 +30,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-PNuZ1PsUtNfwI24zfzvnUzkvBznZQHLUG12E+p1bL68=";
+    npmDepsHash = "sha256-kOqfYAMkpiT2d79fpH1ON5FQAuV1i3/PL9waQq/YR58=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -152,6 +152,7 @@ python312.pkgs.buildPythonApplication rec {
       peewee-migrate
       pgvector
       pillow
+      pinecone-client
       playwright
       psutil
       psycopg2-binary
@@ -179,6 +180,7 @@ python312.pkgs.buildPythonApplication rec {
       sentence-transformers
       sentencepiece
       soundfile
+      tencentcloud-sdk-python
       tiktoken
       transformers
       unstructured

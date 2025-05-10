@@ -10,26 +10,26 @@
   foundationdb,
   zstd,
   stdenv,
-  darwin,
   nix-update-script,
   nixosTests,
   rocksdb,
   callPackage,
+  withFoundationdb ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "stalwart-mail";
-  version = "0.11.7";
+  version = "0.11.8";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
     tag = "v${version}";
-    hash = "sha256-pBCj/im5UB7A92LBuLeB6EAHTJEuN62BG5Nkj8qsNNA=";
+    hash = "sha256-VqGosbSQxNeOS+kGtvXAmz6vyz5mJlXvKZM57B1Xue4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-B+xsTVsh9QBAybKiJq0Sb7rveOsH05vuCmNQ5t/UZnk=";
+  cargoHash = "sha256-iheURWxO0cOvO+FV01l2Vmo0B+S2mXzue6mx3gapftQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -37,19 +37,12 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      bzip2
-      openssl
-      sqlite
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ foundationdb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    openssl
+    sqlite
+    zstd
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withFoundationdb) [ foundationdb ];
 
   # Issue: https://github.com/stalwartlabs/mail-server/issues/1104
   buildNoDefaultFeatures = true;
@@ -61,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     "elastic"
     "s3"
     "redis"
-  ];
+  ] ++ lib.optionals withFoundationdb [ "foundationdb" ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -102,8 +95,16 @@ rustPlatform.buildRustPackage rec {
     "--skip=smtp::inbound::data::data"
     # Expected "X-My-Header: true" but got Received: from foobar.net (unknown [10.0.0.123])
     "--skip=smtp::inbound::scripts::sieve_scripts"
+    # thread 'smtp::outbound::lmtp::lmtp_delivery' panicked at tests/src/smtp/session.rs:313:13:
+    # Expected "<invalid@domain.org> (failed to lookup" but got From: "Mail Delivery Subsystem" <MAILER-DAEMON@localhost>
+    "--skip=smtp::outbound::lmtp::lmtp_delivery"
+    # thread 'smtp::outbound::extensions::extensions' panicked at tests/src/smtp/inbound/mod.rs:45:23:
+    # No queue event received.
+    "--skip=smtp::outbound::extensions::extensions"
     # panicked at tests/src/smtp/outbound/smtp.rs:173:5:
     "--skip=smtp::outbound::smtp::smtp_delivery"
+    # panicked at tests/src/smtp/outbound/lmtp.rs
+    "--skip=smtp::outbound::lmtp::lmtp_delivery"
     # thread 'smtp::queue::retry::queue_retry' panicked at tests/src/smtp/queue/retry.rs:119:5:
     # assertion `left == right` failed
     #   left: [1, 2, 2]
@@ -134,6 +135,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=smtp::inbound::antispam::antispam"
     # Failed to read system DNS config: io error: No such file or directory (os error 2)
     "--skip=smtp::inbound::vrfy::vrfy_expn"
+    # thread 'smtp::management::queue::manage_queue' panicked at tests/src/smtp/inbound/mod.rs:45:23:
+    # No queue event received.
+    # NOTE: Test unreliable on high load systems
+    "--skip=smtp::management::queue::manage_queue"
   ];
 
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);

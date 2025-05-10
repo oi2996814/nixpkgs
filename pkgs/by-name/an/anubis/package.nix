@@ -1,22 +1,56 @@
 {
   lib,
   buildGoModule,
+  buildNpmPackage,
   fetchFromGitHub,
   nix-update-script,
   stdenv,
+
+  esbuild,
+  brotli,
+  zstd,
 }:
-buildGoModule (finalAttrs: {
+let
   pname = "anubis";
-  version = "1.15.2";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-5OqpmuRTrM+hseIhR2sTb+K01Co6X+Rhb6mN+U54NAI=";
+    tag = "v${version}";
+    hash = "sha256-grtzkNxgShbldjm+lnANbKVhkUrbwseAT1NaBL85mHg=";
   };
 
-  vendorHash = "sha256-Rcra5cu7zxGm2LhL2x9Kd3j/uQaEb8OOh/j5Rhh8S1k=";
+  anubisXess = buildNpmPackage {
+    inherit version src;
+    pname = "${pname}-xess";
+
+    npmDepsHash = "sha256-hTKTTBmfMGv6I+4YbWrOt6F+qD6ysVYi+DEC1konBFk=";
+
+    buildPhase = ''
+      runHook preBuild
+      npx postcss ./xess/xess.css -o xess.min.css
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out
+      cp xess.min.css $out
+      runHook postInstall
+    '';
+  };
+in
+buildGoModule (finalAttrs: {
+  inherit pname version src;
+
+  vendorHash = "sha256-EOT/sdVINj9oO1jZHPYB3jQ+XApf9eCUKuMY0tV+vpg=";
+
+  nativeBuildInputs = [
+    esbuild
+    brotli
+    zstd
+  ];
 
   subPackages = [
     "cmd/anubis"
@@ -32,6 +66,14 @@ buildGoModule (finalAttrs: {
       "-extldflags=-static"
     ];
 
+  postPatch = ''
+    patchShebangs ./web/build.sh
+  '';
+
+  preBuild = ''
+    go generate ./... && ./web/build.sh && cp -r ${anubisXess}/xess.min.css ./xess
+  '';
+
   preCheck = ''
     export DONT_USE_NETWORK=1
   '';
@@ -46,6 +88,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       knightpp
       soopyc
+      ryand56
     ];
     mainProgram = "anubis";
   };

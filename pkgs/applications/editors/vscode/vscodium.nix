@@ -26,11 +26,11 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-yK7ORsRAWMJ8yrWROS/jSKdyCyuJ2Y+gIdZlqto+/Xo=";
-      x86_64-darwin = "sha256-d+8vt5grnLwD/cIIGgb2ogpgZrZLZs+2bqfBrRzLfJw=";
-      aarch64-linux = "sha256-D93Eh5TPRgd9OxJ4pWsOryS5mOz2amQOHOnO+K99hAg=";
-      aarch64-darwin = "sha256-xKBWAb23jUi8pI7mZpHOP2eF3PZFh0MWj+BM+alKF18=";
-      armv7l-linux = "sha256-EqJNi/qMM08voA/Ltle3/28zbgIz/Ae42IE5oXLxcKU=";
+      x86_64-linux = "sha256-C1v6M3gliVm4iufKjAWNJgiJ2K2cIrIqvYqtsX/fyAQ=";
+      x86_64-darwin = "sha256-/0uFfMQa78joIQ2CogAddBnXmo4wpnh47Y0glJ7vWJg=";
+      aarch64-linux = "sha256-v2GLRrvQVFBlTkGi/teA+bpJYJIdZVNmjTS8oXjhF1c=";
+      aarch64-darwin = "sha256-qFJYQpOCDlwQO7Dy6P1hm/9yE3LACpF6PYOLK1kNzDs=";
+      armv7l-linux = "sha256-g/fWf17WWtAd8TKbZGWvGGiy0qTicEE9m5bFteLvswo=";
     }
     .${system} or throwSystem;
 
@@ -41,7 +41,7 @@ callPackage ./generic.nix rec {
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.99.02289";
+  version = "1.99.32846";
   pname = "vscodium";
 
   executableName = "codium";

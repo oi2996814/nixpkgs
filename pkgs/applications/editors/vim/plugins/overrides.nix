@@ -17,6 +17,7 @@
   python3,
   # Misc dependencies
   code-minimap,
+  dailies,
   dasht,
   deno,
   direnv,
@@ -117,6 +118,10 @@
   # typst-preview dependencies
   tinymist,
   websocat,
+  # luau-lsp-nvim dependencies
+  luau-lsp,
+  # nvim-vstsl dependencies
+  vtsls,
 }:
 self: super:
 let
@@ -372,6 +377,12 @@ in
               substituteInPlace "$out"/plugin/libclang.py \
                 --replace-fail "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
       '';
+  };
+
+  claude-code-nvim = super.claude-code-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+    ];
   };
 
   clighter8 = super.clighter8.overrideAttrs {
@@ -884,6 +895,12 @@ in
     '';
   };
 
+  dailies-nvim = super.dailies-nvim.overrideAttrs {
+    runtimeDeps = [
+      dailies
+    ];
+  };
+
   darkearth-nvim = super.darkearth-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
     # Lua module used to build theme
@@ -1204,6 +1221,10 @@ in
   fzf-lua = neovimUtils.buildNeovimPlugin {
     luaAttr = luaPackages.fzf-lua;
     runtimeDeps = [ fzf ];
+    nvimSkipModules = [
+      "fzf-lua.shell_helper"
+      "fzf-lua.spawn"
+    ];
   };
 
   fzf-vim = super.fzf-vim.overrideAttrs {
@@ -1440,6 +1461,14 @@ in
     passthru.python3Dependencies = ps: [ ps.jupytext ];
   };
 
+  kanagawa-paper-nvim = super.kanagawa-paper-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # skipping wezterm theme switcher since it relies on a wezterm module
+      # that does not seem to be available, tried to build setting wezterm-nvim as a dep
+      "wezterm.theme_switcher"
+    ];
+  };
+
   kulala-nvim = super.kulala-nvim.overrideAttrs {
     dependencies = with self; [
       nvim-treesitter
@@ -1661,6 +1690,11 @@ in
 
   LuaSnip-snippets-nvim = super.LuaSnip-snippets-nvim.overrideAttrs {
     checkInputs = [ self.luasnip ];
+  };
+
+  luau-lsp-nvim = super.luau-lsp-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    runtimeDeps = [ luau-lsp ];
   };
 
   magma-nvim = super.magma-nvim.overrideAttrs {
@@ -2222,6 +2256,8 @@ in
       "nvchad.cheatsheet.grid"
       "nvchad.cheatsheet.simple"
       "nvchad.blink.config"
+      # Circular dependency with base46
+      "nvchad.utils"
     ];
   };
 
@@ -2557,10 +2593,21 @@ in
     nvimSkipModules = "client.client";
   };
 
+  nvim-vtsls = super.nvim-vtsls.overrideAttrs {
+    runtimeDeps = [ vtsls ];
+    dependencies = [ self.nvim-lspconfig ];
+  };
+
   nvzone-menu = super.nvzone-menu.overrideAttrs {
+    checkInputs = with self; [
+      # Optional integrations
+      nvim-tree-lua
+      neo-tree-nvim
+      # FIXME: should propagate from neo-tree-nvim
+      nui-nvim
+      plenary-nvim
+    ];
     dependencies = [ self.nvzone-volt ];
-    # Optional nvimtree integration
-    nvimSkipModules = "menus.nvimtree";
   };
 
   nvzone-minty = super.nvzone-minty.overrideAttrs {
@@ -2580,6 +2627,10 @@ in
       telescope-nvim
     ];
     dependencies = [ self.plenary-nvim ];
+    nvimSkipModules = [
+      # Issue reproduction file
+      "minimal"
+    ];
   };
 
   octo-nvim = super.octo-nvim.overrideAttrs {
@@ -2592,6 +2643,10 @@ in
     dependencies = with self; [
       plenary-nvim
     ];
+  };
+
+  oil-git-status-nvim = super.oil-git-status-nvim.overrideAttrs {
+    dependencies = [ self.oil-nvim ];
   };
 
   ollama-nvim = super.ollama-nvim.overrideAttrs {
@@ -2715,6 +2770,16 @@ in
     ];
   };
 
+  peek-nvim = super.peek-nvim.overrideAttrs (old: {
+    patches = [
+      # Patch peek-nvim to run using nixpkgs deno
+      # This means end-users have to build peek-nvim the first time they use it...
+      (replaceVars ./patches/peek-nvim/cmd.patch {
+        deno = lib.getExe deno;
+      })
+    ];
+  });
+
   persisted-nvim = super.persisted-nvim.overrideAttrs {
     nvimSkipModules = [
       # /lua/persisted/init.lua:44: attempt to index upvalue 'config' (a nil value)
@@ -2722,6 +2787,12 @@ in
       "persisted"
       "persisted.config"
       "persisted.utils"
+    ];
+  };
+
+  persistent-breakpoints-nvim = super.persistent-breakpoints-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-dap
     ];
   };
 
@@ -3282,6 +3353,10 @@ in
     ];
   };
 
+  timerly = super.timerly.overrideAttrs {
+    dependencies = [ self.nvzone-volt ];
+  };
+
   tmux-complete-vim = super.tmux-complete-vim.overrideAttrs {
     # Vim plugin with optional nvim-compe lua module
     nvimSkipModules = [ "compe_tmux" ];
@@ -3830,6 +3905,15 @@ in
 
   wtf-nvim = super.wtf-nvim.overrideAttrs {
     dependencies = [ self.nui-nvim ];
+  };
+
+  xmake-nvim = super.xmake-nvim.overrideAttrs {
+    nvimSkipModule = [
+      # attempt to index upvalue 'options' (a nil value)
+      "xmake.action"
+      "xmake.command"
+      "xmake.runner_wrapper"
+    ];
   };
 
   yanky-nvim = super.yanky-nvim.overrideAttrs {
