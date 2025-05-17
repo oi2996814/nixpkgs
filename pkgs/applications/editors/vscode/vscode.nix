@@ -36,22 +36,22 @@ let
 
   sha256 =
     {
-      x86_64-linux = "05abq952zv63zz99dib7l1y7w15l4d8zjk924ag25jasbqdl48fm";
-      x86_64-darwin = "0ak1avw3s327npqx3fb0gxpdwa6hwf48fv1xf3kdrcjrizwwdy1y";
-      aarch64-linux = "02v57sfg13xdy7rzn7dvymimp6q3wlf4fl08nv75vv8r9kdpwza0";
-      aarch64-darwin = "0km0spd1ppmlkwnf1yc1hm8b1hwddhy25ydfb8lbfcx3y2n0dgag";
-      armv7l-linux = "0h96b3cpnzz7wcnnarl6dd0cw50m54k74lbxbdasl3kq84zq8y0h";
+      x86_64-linux = "07q8vym10qz91wxn8g7ysksqraj6dr2csyxiclc514k2ifvjh7rx";
+      x86_64-darwin = "068ylhrx4sf7ypynmd17kxrgnjiza7qp5bz63m75vz61vqy655f7";
+      aarch64-linux = "1pl30h3vxsms1xdqvcgsqcl7isc5fz4sxvdy3iml45mg78809hj5";
+      aarch64-darwin = "05das18ks3m4kjq612vwn50sl7sb1mgfjdvzshh662z2spqs6ncb";
+      armv7l-linux = "1xbhkak6gipras6mngsyxnq7k6702dccmqp8az5nig45l54rxfm9";
     }
     .${system} or throwSystem;
 in
 callPackage ./generic.nix rec {
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.99.1";
+  version = "1.100.1";
   pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
   # This is used for VS Code - Remote SSH test
-  rev = "7c6fdfb0b8f2f675eb0b47f3d95eeca78962565b";
+  rev = "91fa95bccb027ece6a968589bb1d662fa9c8e170";
 
   executableName = "code" + lib.optionalString isInsiders "-insiders";
   longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
@@ -75,7 +75,7 @@ callPackage ./generic.nix rec {
     src = fetchurl {
       name = "vscode-server-${rev}.tar.gz";
       url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-      sha256 = "03znn17l4qb40yml5kq5l7j65yr5axxa44g6a03g6dkj8fqnaz8s";
+      sha256 = "1jwy61nypha77iq8mwp2c8jmfxic61m9rkq3p3sjh2i442n0lnwq";
     };
     stdenv = stdenvNoCC;
   };
@@ -88,6 +88,8 @@ callPackage ./generic.nix rec {
   # to be invalidated, which prevents launching starting with macOS Ventura, because VS Code is notarized.
   # See https://eclecticlight.co/2022/06/17/app-security-changes-coming-in-ventura/ for more information.
   dontFixup = stdenv.hostPlatform.isDarwin;
+
+  hasVsceSign = true;
 
   meta = with lib; {
     description = ''

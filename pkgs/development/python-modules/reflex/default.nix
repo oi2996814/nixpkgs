@@ -5,16 +5,13 @@
   alembic,
   attrs,
   build,
-  charset-normalizer,
+  ruff,
   dill,
-  distro,
   fastapi,
   granian,
-  gunicorn,
   hatchling,
   httpx,
   jinja2,
-  lazy-loader,
   numpy,
   packaging,
   pandas,
@@ -28,7 +25,6 @@
   pytest-mock,
   python-dotenv,
   pytestCheckHook,
-  python-engineio,
   python-multipart,
   python-socketio,
   redis,
@@ -36,38 +32,36 @@
   rich,
   sqlmodel,
   starlette-admin,
-  tomlkit,
-  twine,
   typer,
   typing-extensions,
   unzip,
   uvicorn,
   versionCheckHook,
-  wheel,
   wrapt,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.7.5";
+  version = "0.7.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-uHlLItjONHGnuE4t2UOcVRYxcDDbRldUwHd8mPn7JfY=";
+    hash = "sha256-WL61XQGBkTXHQBMEbw/pr+PrkinUGT8cPGhquduPgRY=";
   };
 
-  pythonRelaxDeps = [
-    "fastapi"
-    "gunicorn"
-  ];
+  # 'rich' is also somehow checked when building the wheel,
+  # pythonRelaxDepsHook modifies the wheel METADATA in postBuild
+  pypaBuildFlags = [ "--skip-dependency-check" ];
 
-  pythonRemoveDeps = [
-    "setuptools"
-    "build"
+  pythonRelaxDeps = [
+    # needed
+    "rich"
+    # preventative
+    "fastapi"
   ];
 
   build-system = [ hatchling ];
@@ -75,34 +69,24 @@ buildPythonPackage rec {
   dependencies = [
     alembic
     build # used in custom_components/custom_components.py
-    charset-normalizer
-    dill
-    distro
+    dill # used in state.py
     fastapi
     granian
     granian.optional-dependencies.reload
-    gunicorn
     httpx
     jinja2
-    lazy-loader
-    packaging
+    packaging # used in utils/prerequisites.py
     platformdirs
     psutil
     pydantic
-    python-engineio
     python-multipart
     python-socketio
     redis
     reflex-hosting-cli
     rich
     sqlmodel
-    starlette-admin
-    tomlkit
-    twine # used in custom_components/custom_components.py
-    typer
+    typer # optional dep
     typing-extensions
-    uvicorn
-    wheel
     wrapt
   ];
 
@@ -111,6 +95,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
     python-dotenv
+    ruff
     playwright
     attrs
     numpy
@@ -118,6 +103,8 @@ buildPythonPackage rec {
     pandas
     pillow
     unzip
+    uvicorn
+    starlette-admin
     writableTmpDirAsHomeHook
     versionCheckHook
   ];
