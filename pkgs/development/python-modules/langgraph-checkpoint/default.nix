@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint";
-  version = "2.0.24";
+  version = "2.0.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpoint==${version}";
-    hash = "sha256-NlTpBXBeADlIHQDlt0muJEuoKOgXiAtAo8GoU5CsvZo=";
+    hash = "sha256-DSkjaxUfpsOg2ex0dgfO/UJ7WiQb5wQsAGgHPTckF6o=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint";
@@ -53,15 +53,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # AssertionError
-    "test_serde_jsonplus"
-  ];
-
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "checkpoint==(\\d+\\.\\d+\\.\\d+)"
+      "checkpoint==([0-9.]+)"
     ];
   };
 

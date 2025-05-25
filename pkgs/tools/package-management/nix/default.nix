@@ -7,7 +7,6 @@
   fetchFromGitHub,
   fetchpatch2,
   runCommand,
-  Security,
   pkgs,
   pkgsi686Linux,
   pkgsStatic,
@@ -26,7 +25,6 @@ let
       (import ./common-autoconf.nix ({ inherit lib fetchFromGitHub; } // args))
       {
         inherit
-          Security
           storeDir
           stateDir
           confDir
@@ -44,7 +42,6 @@ let
     args:
     nixDependencies.callPackage (import ./common-meson.nix ({ inherit lib fetchFromGitHub; } // args)) {
       inherit
-        Security
         storeDir
         stateDir
         confDir
@@ -163,6 +160,7 @@ lib.makeExtensible (
           ];
           self_attribute_name = "nix_2_3";
           maintainers = with lib.maintainers; [ flokli ];
+          teams = [ ];
         }).overrideAttrs
           {
             # https://github.com/NixOS/nix/issues/10222
@@ -183,20 +181,20 @@ lib.makeExtensible (
       };
 
       nix_2_28 = commonMeson {
-        version = "2.28.1";
-        hash = "sha256-R+HAPvD+AjiyRHZP/elkvka33G499EKT8ntyF/EPPRI=";
+        version = "2.28.3";
+        hash = "sha256-TjZp5ITSUvNRAzNznmkZRQxNRzMLiSAplz4bV2T8cbs=";
         self_attribute_name = "nix_2_28";
       };
 
       nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.29pre20250409_${lib.substring 0 8 src.rev}";
-        inherit (self.nix_2_24.meta) maintainers;
+        version = "2.30pre20250521_${lib.substring 0 8 src.rev}";
+        inherit (self.nix_2_24.meta) maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "e76bbe413e86e3208bb9824e339d59af25327101";
-          hash = "sha256-Aqnj5+sA7B4ZRympuyfWPPK83iomKHEHMYhlwslI8iA=";
+          rev = "76a4d4c2913a1654dddd195b034ff7e66cb3e96f";
+          hash = "sha256-OA22Ig72oV6reHN8HMlimmnrsxpNzqyzi4h6YBVzzEA=";
         };
       };
 
@@ -235,7 +233,7 @@ lib.makeExtensible (
         ) (lib.range 4 23)
       )
       // {
-        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_2_28.";
+        nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_git.";
         nix_2_27 = throw "nix_2_27 has been removed. use nix_2_28.";
         nix_2_25 = throw "nix_2_25 has been removed. use nix_2_28.";
 

@@ -13,7 +13,6 @@
   lib,
   buildPackages,
   pkgs,
-  darwin,
   fetchurl,
   fetchpatch,
   fetchpatch2,
@@ -118,11 +117,11 @@ with self;
 
   ack = buildPerlPackage rec {
     pname = "ack";
-    version = "3.8.0";
+    version = "3.8.2";
 
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PE/PETDANCE/ack-v${version}.tar.gz";
-      hash = "sha256-ZAsaGzbKFaTR0XkvKkTmmurlg5HPDSH6iilmWoiV9xg=";
+      hash = "sha256-pSOfWiwS4Me05DL/1+k2/u+UWpYhpBWRx307DPRYVgs=";
     };
 
     outputs = [
@@ -143,6 +142,7 @@ with self;
       description = "Grep-like tool tailored to working with large trees of source code";
       homepage = "https://beyondgrep.com";
       license = with lib.licenses; [ artistic2 ];
+      maintainers = [ maintainers.asakura ];
     };
   };
 
@@ -2695,7 +2695,7 @@ with self;
     meta = {
       description = "BSD process resource limit and priority functions";
       license = with lib.licenses; [ artistic2 ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -4982,7 +4982,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -5992,7 +5992,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -9859,7 +9859,7 @@ with self;
     buildInputs = [ pkgs.postgresql ];
     propagatedBuildInputs = [ DBI ];
 
-    makeMakerFlags = [ "POSTGRES_HOME=${pkgs.postgresql}" ];
+    nativeBuildInputs = [ pkgs.postgresql.pg_config ];
 
     # tests freeze in a sandbox
     doCheck = false;
@@ -12666,16 +12666,23 @@ with self;
       hash = "sha256-u+rO2ZXX2NEM/FGjpaZtpBzrK8BP7cq1DhDmMA6AHG4=";
     };
     nativeBuildInputs = [ buildPackages.pkg-config ];
-    propagatedBuildInputs = [ pkgs.pkg-config ];
+    propagatedNativeBuildInputs = [ pkgs.pkg-config ];
     postPatch = ''
       # no pkg-config binary when cross-compiling so the check fails
       substituteInPlace Makefile.PL \
         --replace "pkg-config" "$PKG_CONFIG"
+      # use correctly prefixed pkg-config binary
+      substituteInPlace lib/ExtUtils/PkgConfig.pm \
+        --replace-fail '`pkg-config' '`${stdenv.cc.targetPrefix}pkg-config' \
+        --replace-fail '"pkg-config' '"${stdenv.cc.targetPrefix}pkg-config' \
+        --replace-fail '/pkg-config' '/${stdenv.cc.targetPrefix}pkg-config'
     '';
     doCheck = false; # expects test_glib-2.0.pc in PKG_CONFIG_PATH
     meta = {
       description = "Simplistic interface to pkg-config";
+      homepage = "https://gitlab.gnome.org/GNOME/perl-extutils-pkgconfig";
       license = with lib.licenses; [ lgpl21Plus ];
+      maintainers = [ lib.maintainers.fliegendewurst ];
     };
   };
 
@@ -13389,7 +13396,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -13420,7 +13427,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -13736,7 +13743,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -13978,7 +13985,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -13996,7 +14003,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -14700,7 +14707,7 @@ with self;
     meta = {
       description = "This is the Git.pm, plus the other files in the perl/Git directory, from github's git/git";
       license = with lib.licenses; [ gpl2Plus ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -14918,6 +14925,7 @@ with self;
       pkgs.gtk2
       Gtk2
     ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion -Wno-error=implicit-function-declaration";
     meta = {
       description = "Perl interface to the GooCanvas";
       license = with lib.licenses; [
@@ -15232,7 +15240,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -15532,8 +15540,6 @@ with self;
       ];
     };
   };
-
-  ham = callPackage ../development/perl-modules/ham { };
 
   HashFlatten = buildPerlPackage {
     pname = "Hash-Flatten";
@@ -18895,7 +18901,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -20049,7 +20055,6 @@ with self;
       url = "mirror://cpan/authors/id/W/WY/WYANT/Mac-Pasteboard-0.103.tar.gz";
       hash = "sha256-L16N0tsNZEVVhITKbULYOcWpfuiqGyUOaU1n1bf2Y0w=";
     };
-    buildInputs = [ pkgs.darwin.apple_sdk.frameworks.ApplicationServices ];
     meta = {
       description = "Manipulate Mac OS X pasteboards";
       license = with lib.licenses; [
@@ -20370,7 +20375,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -22391,10 +22396,10 @@ with self;
 
   mod_perl2 = buildPerlPackage {
     pname = "mod_perl";
-    version = "2.0.12";
+    version = "2.0.13";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHAY/mod_perl-2.0.12.tar.gz";
-      hash = "sha256-9bghtZsP3JZw5G7Q/PMtiRHyUSYYmotowWUvkiHu4mk=";
+      url = "mirror://cpan/authors/id/S/SH/SHAY/mod_perl-2.0.13.tar.gz";
+      hash = "sha256-reO+McRHuESIaf7N/KziWNbVh7jGx3PF8ic19w2C1to=";
     };
 
     makeMakerFlags = [ "MP_AP_DESTDIR=$out" ];
@@ -26602,6 +26607,7 @@ with self;
         artistic1
         gpl1Plus
       ]; # taken from EPEL
+      badPlatforms = lib.platforms.darwin;
     };
   };
 
@@ -26710,7 +26716,8 @@ with self;
       description = "Perl extension for Apache ZooKeeper";
       homepage = "https://github.com/mark-5/p5-net-zookeeper";
       license = with lib.licenses; [ asl20 ];
-      maintainers = teams.deshaw.members ++ [ maintainers.ztzg ];
+      maintainers = [ maintainers.ztzg ];
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -27045,7 +27052,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -27233,7 +27240,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -27920,7 +27927,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -27993,7 +28000,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
       mainProgram = "ppkg-config";
     };
   };
@@ -28413,7 +28420,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
     };
   };
 
@@ -28431,7 +28438,7 @@ with self;
         artistic1
         gpl1Plus
       ];
-      maintainers = teams.deshaw.members;
+      teams = [ teams.deshaw ];
       mainProgram = "poe-gen-tests";
     };
   };
@@ -30208,6 +30215,9 @@ with self;
     patches = [
       # https://github.com/PerlGameDev/SDL/pull/304
       ../development/perl-modules/sdl-modern-perl.patch
+      # sdl-compat correctly reports the bit depth of the test image,
+      # while SDL_classic rounded to the next byte
+      ../development/perl-modules/sdl-compat-bit-depth.patch
       (fetchpatch {
         url = "https://aur.archlinux.org/cgit/aur.git/plain/surface-xs-declare-calc-offset-earlier.diff?h=perl-sdl&id=d4b6da86d33046cde0e84fa2cd6eaccff1667cab";
         hash = "sha256-dQ2O4dO18diSAilSZrZj6II+mBuKKI3cx9fR1SJqUvo=";
@@ -32226,7 +32236,6 @@ with self;
         hash = "sha256-nCypGyi6bZDEXqdb7wlGGzk9cFzmYkWGP1slBpXDfHw=";
       })
     ];
-    buildInputs = lib.optional stdenv.hostPlatform.isDarwin pkgs.darwin.apple_sdk.frameworks.Carbon;
     doCheck = !stdenv.hostPlatform.isAarch64;
     meta = {
       description = "Perl extension for getting CPU information. Currently only number of CPU's supported";
@@ -32530,16 +32539,12 @@ with self;
       url = "mirror://cpan/authors/id/V/VK/VKON/Tcl-1.27.tar.gz";
       hash = "sha256-+DhYd6Sp7Z89OQPS0PfNcPrDzmgyxg9gCmghzuP7WHI=";
     };
-    propagatedBuildInputs =
-      [
-        pkgs.tclPackages.bwidget
-        pkgs.tcl
-        pkgs.tclPackages.tix
-        pkgs.tk
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        darwin.apple_sdk.frameworks.CoreServices
-      ];
+    propagatedBuildInputs = [
+      pkgs.tclPackages.bwidget
+      pkgs.tcl
+      pkgs.tclPackages.tix
+      pkgs.tk
+    ];
     makeMakerFlags = lib.optionals stdenv.hostPlatform.isLinux [
       "--tclsh=${pkgs.tcl}/bin/tclsh"
       "--nousestubs"

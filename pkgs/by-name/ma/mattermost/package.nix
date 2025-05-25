@@ -19,9 +19,9 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(10\\.5\\.[0-9]+)$";
-    version = "10.5.2";
-    srcHash = "sha256-wC8tkplOntZpucCe2QPmnlrecwcqkzyEiTni8lO0p1I=";
-    vendorHash = "sha256-7jghoXFKA+WZ/ywOT0wWDMTfqAcBqp5gswOvpB7weL0=";
+    version = "10.5.6";
+    srcHash = "sha256-etHEJ3EBTolXZr/2Kd39Jdtf1qBMuVO5zRkuM6k4F3w=";
+    vendorHash = "sha256-9Jl+lxvSoxUReziTqkDRyeNrijGWcBDbqoywJRIeD2k=";
     npmDepsHash = "sha256-tIeuDUZbqgqooDm5TRfViiTT5OIyN0BPwvJdI+wf7p0=";
     lockfileOverlay = ''
       unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
@@ -261,7 +261,6 @@ buildMattermost rec {
       numinit
       kranzes
       mgdelacroix
-      fsagbuya
     ];
     platforms = lib.platforms.linux;
     mainProgram = "mattermost";

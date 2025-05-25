@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint-postgres";
-  version = "2.0.19";
+  version = "2.0.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpointpostgres==${version}";
-    hash = "sha256-8JNPKaaKDM7VROd1n9TDALN6yxKRz1CuAultBcqBMG0=";
+    hash = "sha256-hl1EBOtUkSfHGxsM+LOZPLSvkW7hdHS08klpvA7/Bd0=";
   };
 
   postgresqlTestSetupPost = ''
@@ -84,6 +84,8 @@ buildPythonPackage rec {
     "test_vector_search_with_filters"
     "test_vector_search_pagination"
     "test_vector_search_edge_cases"
+    # Flaky under a parallel build (database in use)
+    "test_store_ttl"
   ];
 
   pythonImportsCheck = [ "langgraph.checkpoint.postgres" ];

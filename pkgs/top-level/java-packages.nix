@@ -33,7 +33,7 @@ with pkgs;
               headless = mergeMetaPlatforms openjdkLinuxHeadless openjdkDarwin;
             };
           openjdkLinuxHeadless = openjdkLinux.override { headless = true; };
-          openjdkDarwin = (callPackage ../development/compilers/zulu/${featureVersion}.nix { }) // {
+          openjdkDarwin = (callPackage (../development/compilers/zulu + "/${featureVersion}.nix") { }) // {
             headless = mergeMetaPlatforms openjdkDarwin openjdkLinuxHeadless;
           };
         in
@@ -49,6 +49,7 @@ with pkgs;
       openjdk17 = mkOpenjdk "17";
       openjdk21 = mkOpenjdk "21";
       openjdk23 = mkOpenjdk "23";
+      openjdk24 = mkOpenjdk "24";
 
       # Legacy aliases
       openjdk8-bootstrap = temurin-bin.jdk-8;

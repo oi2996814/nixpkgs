@@ -7,6 +7,7 @@
   openssl,
   nix-update-script,
   versionCheckHook,
+  callPackage,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -35,6 +36,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     GEN_ARTIFACTS = "artifacts";
     OPENSSL_NO_VENDOR = true;
+    # to not have "unknown hash" in help output
+    TYPST_VERSION = finalAttrs.version;
   };
 
   # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
@@ -56,7 +59,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    packages = callPackage ./typst-packages.nix { };
+    withPackages = callPackage ./with-packages.nix { };
+  };
 
   meta = {
     changelog = "https://github.com/typst/typst/releases/tag/v${finalAttrs.version}";
@@ -68,6 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       drupol
       figsoda
       kanashimia
+      RossSmyth
     ];
   };
 })
