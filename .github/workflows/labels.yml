@@ -3,7 +3,7 @@
 # access to the GitHub API. This means that it should not evaluate user input in
 # a way that allows code injection.
 
-name: "Label PR"
+name: Labels
 
 on:
   schedule:
@@ -33,8 +33,7 @@ defaults:
     shell: bash
 
 jobs:
-  labels:
-    name: label-pr
+  update:
     runs-on: ubuntu-24.04-arm
     if: github.event_name != 'schedule' || github.repository_owner == 'NixOS'
     steps:
@@ -73,8 +72,8 @@ jobs:
               maxConcurrent: 1,
               // Hourly limit is at 5000, but other jobs need some, too!
               // https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api
-              reservoir: 1000,
-              reservoirRefreshAmount: 1000,
+              reservoir: 500,
+              reservoirRefreshAmount: 500,
               reservoirRefreshInterval: 60 * 60 * 1000
             })
             // Pause between mutative requests
@@ -147,13 +146,23 @@ jobs:
 
                   const run_id = (await github.rest.actions.listWorkflowRuns({
                     ...context.repo,
-                    workflow_id: 'eval.yml',
+                    workflow_id: 'pr.yml',
                     event: 'pull_request_target',
                     // For PR events, the workflow run is still in progress with this job itself.
                     status: prEventCondition ? 'in_progress' : 'success',
                     exclude_pull_requests: true,
                     head_sha: pull_request.head.sha
-                  })).data.workflow_runs[0]?.id
+                  })).data.workflow_runs[0]?.id ??
+                    // TODO: Remove this after 2025-09-17, at which point all eval.yml artifacts will have expired.
+                    (await github.rest.actions.listWorkflowRuns({
+                      ...context.repo,
+                      // In older PRs, we need eval.yml instead of pr.yml.
+                      workflow_id: 'eval.yml',
+                      event: 'pull_request_target',
+                      status: 'success',
+                      exclude_pull_requests: true,
+                      head_sha: pull_request.head.sha
+                    })).data.workflow_runs[0]?.id
 
                   // Newer PRs might not have run Eval to completion, yet. We can skip them, because this
                   // job will be run as part of that Eval run anyway.
@@ -187,7 +196,11 @@ jobs:
 
                   // Get all currently set labels that we manage
                   const before =
-                    pull_request.labels.map(({ name }) => name)
+                    (await github.paginate(github.rest.issues.listLabelsOnIssue, {
+                      ...context.repo,
+                      issue_number: pull_request.number
+                    }))
+                    .map(({ name }) => name)
                     .filter(name =>
                       name.startsWith('10.rebuild') ||
                       name == '11.by: package-maintainer' ||
@@ -212,6 +225,11 @@ jobs:
                   const after = JSON.parse(await readFile(`${pull_request.number}/changed-paths.json`, 'utf-8')).labels
                   if (approvals.size > 0) after.push(`12.approvals: ${approvals.size > 2 ? '3+' : approvals.size}`)
                   if (Array.from(maintainers).some(m => approvals.has(m))) after.push('12.approved-by: package-maintainer')
+
+                  if (context.eventName == 'pull_request') {
+                    core.info('Skipping labeling on a pull_request event (no privileges).')
+                    return
+                  }
 
                   // Remove the ones not needed anymore
                   await Promise.all(
@@ -248,12 +266,12 @@ jobs:
         name: Labels from touched files
         if: |
           github.event_name == 'pull_request_target' &&
-          github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
+          (github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
             github.head_ref == 'haskell-updates' ||
             github.head_ref == 'python-updates' ||
             github.head_ref == 'staging-next' ||
             startsWith(github.head_ref, 'staging-next-')
-          )
+          ))
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler.yml # default
@@ -263,12 +281,12 @@ jobs:
         name: Labels from touched files (no sync)
         if: |
           github.event_name == 'pull_request_target' &&
-          github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
+          (github.event.pull_request.head.repo.owner.login != 'NixOS' || !(
             github.head_ref == 'haskell-updates' ||
             github.head_ref == 'python-updates' ||
             github.head_ref == 'staging-next' ||
             startsWith(github.head_ref, 'staging-next-')
-          )
+          ))
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler-no-sync.yml
@@ -281,12 +299,12 @@ jobs:
         # the backport labels.
         if: |
           github.event_name == 'pull_request_target' &&
-          github.event.pull_request.head.repo.owner.login == 'NixOS' && (
+          (github.event.pull_request.head.repo.owner.login == 'NixOS' && (
             github.head_ref == 'haskell-updates' ||
             github.head_ref == 'python-updates' ||
             github.head_ref == 'staging-next' ||
             startsWith(github.head_ref, 'staging-next-')
-          )
+          ))
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           configuration-path: .github/labeler-development-branches.yml
