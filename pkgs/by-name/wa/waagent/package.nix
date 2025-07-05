@@ -2,7 +2,7 @@
   coreutils,
   fetchFromGitHub,
   lib,
-  python3,
+  python312,
   bash,
   openssl,
   nixosTests,
@@ -10,12 +10,13 @@
 }:
 
 let
-  python = python3;
+  python = python312;
 
 in
 python.pkgs.buildPythonApplication rec {
   pname = "waagent";
   version = "2.14.0.0";
+  format = "setuptools";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "WALinuxAgent";

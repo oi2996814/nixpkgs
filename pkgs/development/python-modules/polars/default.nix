@@ -9,7 +9,7 @@
   pkgs, # zstd hidden by python3Packages.zstd
   pytestCheckHook,
   pytest-codspeed ? null, # Not in Nixpkgs
-  pytest-cov,
+  pytest-cov-stub,
   pytest-xdist,
   pytest-benchmark,
   rustc,
@@ -50,6 +50,7 @@ in
 buildPythonPackage rec {
   pname = "polars";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pola-rs";
@@ -229,7 +230,7 @@ buildPythonPackage rec {
     nativeCheckInputs = [
       pytestCheckHook
       pytest-codspeed
-      pytest-cov
+      pytest-cov-stub
       pytest-xdist
       pytest-benchmark
     ];

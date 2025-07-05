@@ -16,6 +16,7 @@
   mkYarnModules,
   python3,
   # Misc dependencies
+  charm-freeze,
   code-minimap,
   dailies,
   dasht,
@@ -23,6 +24,7 @@
   direnv,
   fzf,
   gawk,
+  helm-ls,
   himalaya,
   htop,
   jq,
@@ -118,6 +120,10 @@
   # typst-preview dependencies
   tinymist,
   websocat,
+  # lazydocker.nvim dependencies
+  lazydocker,
+  # lazyjj.nvim dependencies
+  lazyjj,
   # luau-lsp-nvim dependencies
   luau-lsp,
   # uv.nvim dependencies
@@ -752,14 +758,12 @@ in
   command-t = super.command-t.overrideAttrs {
     nativeBuildInputs = [
       getconf
-      ruby
     ];
     buildPhase = ''
       substituteInPlace lua/wincent/commandt/lib/Makefile \
         --replace-fail '/bin/bash' 'bash' \
         --replace-fail xcrun ""
       make build
-      rm ruby/command-t/ext/command-t/*.o
     '';
   };
 
@@ -1170,6 +1174,10 @@ in
     dependencies = [ self.self ];
   };
 
+  freeze-nvim = super.freeze-nvim.overrideAttrs {
+    runtimeDeps = [ charm-freeze ];
+  };
+
   fruzzy =
     let
       # until https://github.com/NixOS/nixpkgs/pull/67878 is merged, there's no better way to install nim libraries with nix
@@ -1403,6 +1411,12 @@ in
     luaAttr = luaPackages.haskell-tools-nvim;
   };
 
+  helm-ls-nvim = super.helm-ls-nvim.overrideAttrs {
+    runtimeDeps = [
+      helm-ls
+    ];
+  };
+
   helpview-nvim = super.helpview-nvim.overrideAttrs {
     nvimSkipModules = [ "definitions.__vimdoc" ];
   };
@@ -1492,6 +1506,10 @@ in
     dependencies = [ self.nvim-treesitter ];
   };
 
+  jdd-nvim = super.lazyjj-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+  };
+
   jedi-vim = super.jedi-vim.overrideAttrs {
     # checking for python3 support in vim would be neat, too, but nobody else seems to care
     buildInputs = [ python3.pkgs.jedi ];
@@ -1530,6 +1548,19 @@ in
     nvimSkipModules = [
       # Requires some extra work to get CLI working in nixpkgs
       "cli.kulala_cli"
+    ];
+  };
+
+  lazydocker-nvim = super.lazydocker-nvim.overrideAttrs {
+    runtimeDeps = [
+      lazydocker
+    ];
+  };
+
+  lazyjj-nvim = super.lazyjj-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    runtimeDeps = [
+      lazyjj
     ];
   };
 
@@ -1603,6 +1634,7 @@ in
   };
 
   leetcode-nvim = super.leetcode-nvim.overrideAttrs {
+    checkInputs = [ self.snacks-nvim ];
     dependencies = with self; [
       nui-nvim
       plenary-nvim
@@ -1625,6 +1657,7 @@ in
       "leetcode.picker.language.fzf"
       "leetcode.picker.question.fzf"
       "leetcode.picker.question.init"
+      "leetcode.picker.question.snacks"
       "leetcode.picker.question.telescope"
       "leetcode.picker.tabs.fzf"
       "leetcode.runner.init"
@@ -1672,6 +1705,10 @@ in
   lightline-bufferline = super.lightline-bufferline.overrideAttrs {
     # Requires web-devicons but mini.icons can mock them up
     checkInputs = [ self.nvim-web-devicons ];
+  };
+
+  lightswitch-nvim = super.lightswitch-nvim.overrideAttrs {
+    dependencies = [ self.nui-nvim ];
   };
 
   lir-nvim = super.lir-nvim.overrideAttrs {
@@ -2873,6 +2910,10 @@ in
       substituteInPlace plugin/phpactor.vim \
         --replace-fail "g:phpactorpath = expand('<sfile>:p:h') . '/..'" "g:phpactorpath = '${phpactor}'"
     '';
+  };
+
+  plantuml-nvim = super.plantuml-nvim.overrideAttrs {
+    dependencies = [ self.LibDeflate-nvim ];
   };
 
   playground = super.playground.overrideAttrs {

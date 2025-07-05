@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "pyopencl";
-  version = "2025.2.3";
+  version = "2025.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     repo = "pyopencl";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-o1HZWxohc5CAf28nTBhR6scF1mWW5gzGv8/MU0Rmpnc=";
+    hash = "sha256-VmnCMaq6op/7M+n1U9mPgRpCyZtkgmzMXQuWW6Clbd4=";
   };
 
   build-system = [
@@ -93,7 +93,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for OpenCL";
     homepage = "https://github.com/pyopencl/pyopencl";
-    changelog = "https://github.com/inducer/pyopencl/releases/tag/v${version}";
+    changelog = "https://github.com/inducer/pyopencl/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

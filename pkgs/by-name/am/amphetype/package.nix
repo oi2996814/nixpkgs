@@ -13,12 +13,13 @@ let
   description = "Advanced typing practice program";
 in
 python3Packages.buildPythonApplication {
+  format = "setuptools";
   inherit pname version;
 
   src = fetchFromGitLab {
     owner = "franksh";
     repo = "amphetype";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-pve2f+XMfFokMCtW3KdeOJ9Ey330Gwv/dk1+WBtrBEQ=";
   };
 

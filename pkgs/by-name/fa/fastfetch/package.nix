@@ -59,13 +59,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.45.0";
+  version = "2.47.0";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-HDr4goUvAKeMk2UGmF2ON72ETQQipNwLfsvyB+f74LE=";
+    hash = "sha256-xe86u40zW1+2O4s6e64HlpxiaLIRpjgKLPNnSEGlioQ=";
   };
 
   outputs = [
@@ -245,7 +245,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   postPatch = ''
-    substituteInPlace completions/fastfetch.fish --replace-fail python3 '${python3.interpreter}'
+    substituteInPlace completions/fastfetch.{bash,fish,zsh} --replace-fail python3 '${python3.interpreter}'
   '';
 
   postInstall =

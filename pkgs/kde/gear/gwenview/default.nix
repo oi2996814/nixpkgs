@@ -4,6 +4,7 @@
   qtwayland,
   qtimageformats,
   phonon,
+  phonon-vlc,
   pkg-config,
   cfitsio,
   exiv2,
@@ -15,11 +16,7 @@
 mkKdeDerivation {
   pname = "gwenview";
 
-  extraNativeBuildInputs = [
-    pkg-config
-    qtwayland
-  ];
-
+  extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtsvg
     qtwayland
@@ -27,6 +24,7 @@ mkKdeDerivation {
     qtimageformats
 
     phonon
+    phonon-vlc
 
     cfitsio
     exiv2
