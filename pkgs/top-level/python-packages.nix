@@ -4500,6 +4500,8 @@ self: super: with self; {
 
   ebooklib = callPackage ../development/python-modules/ebooklib { };
 
+  ebusdpy = callPackage ../development/python-modules/ebusdpy { };
+
   ec2-metadata = callPackage ../development/python-modules/ec2-metadata { };
 
   ec2instanceconnectcli = callPackage ../tools/virtualization/ec2instanceconnectcli { };
@@ -4532,8 +4534,6 @@ self: super: with self; {
   editables = callPackage ../development/python-modules/editables { };
 
   editdistance = callPackage ../development/python-modules/editdistance { };
-
-  editdistance-s = callPackage ../development/python-modules/editdistance-s { };
 
   editdistpy = callPackage ../development/python-modules/editdistpy { };
 
@@ -13761,6 +13761,8 @@ self: super: with self; {
       pythonPackages = self;
     }
   );
+
+  pyrecswitch = callPackage ../development/python-modules/pyrecswitch { };
 
   pyrect = callPackage ../development/python-modules/pyrect { };
 

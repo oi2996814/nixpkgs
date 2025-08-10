@@ -1361,7 +1361,8 @@
       ]; # missing inputs: pyebox
     "ebusd" =
       ps: with ps; [
-      ]; # missing inputs: ebusdpy
+        ebusdpy
+      ];
     "ecoal_boiler" =
       ps: with ps; [
         ecoaliface
@@ -4881,7 +4882,8 @@
       ];
     "recswitch" =
       ps: with ps; [
-      ]; # missing inputs: pyrecswitch
+        pyrecswitch
+      ];
     "reddit" =
       ps: with ps; [
         praw
