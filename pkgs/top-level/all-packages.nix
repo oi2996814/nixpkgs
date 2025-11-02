@@ -1308,10 +1308,6 @@ with pkgs;
 
   cdemu-daemon = callPackage ../applications/emulators/cdemu/daemon.nix { };
 
-  dosbox = callPackage ../applications/emulators/dosbox {
-    SDL = if stdenv.hostPlatform.isDarwin then SDL else SDL_compat;
-  };
-
   fceux-qt5 = fceux.override { ___qtVersion = "5"; };
   fceux-qt6 = fceux.override { ___qtVersion = "6"; };
 
@@ -4492,7 +4488,6 @@ with pkgs;
   flutter335 = flutterPackages.v3_35;
   flutter332 = flutterPackages.v3_32;
   flutter329 = flutterPackages.v3_29;
-  flutter327 = flutterPackages.v3_27;
 
   fpc = callPackage ../development/compilers/fpc { };
 
@@ -5970,11 +5965,13 @@ with pkgs;
   rubyPackages_3_5 = recurseIntoAttrs ruby_3_5.gems;
 
   inherit (callPackages ../applications/networking/cluster/spark { })
+    spark_4_0
     spark_3_5
     spark_3_4
     ;
   spark3 = spark_3_5;
-  spark = spark3;
+  spark4 = spark_4_0;
+  spark = spark_4_0;
 
   inherit
     ({
