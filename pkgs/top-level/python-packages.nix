@@ -5328,6 +5328,8 @@ self: super: with self; {
 
   fava-investor = callPackage ../development/python-modules/fava-investor { };
 
+  fava-portfolio-returns = callPackage ../development/python-modules/fava-portfolio-returns { };
+
   favicon = callPackage ../development/python-modules/favicon { };
 
   fe25519 = callPackage ../development/python-modules/fe25519 { };
@@ -10967,6 +10969,8 @@ self: super: with self; {
   nptyping = callPackage ../development/python-modules/nptyping { };
 
   npyscreen = callPackage ../development/python-modules/npyscreen { };
+
+  nrgkick-api = callPackage ../development/python-modules/nrgkick-api { };
 
   nsapi = callPackage ../development/python-modules/nsapi { };
 
